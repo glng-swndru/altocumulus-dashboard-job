@@ -1,5 +1,7 @@
+// Menggunakan directive "use client" untuk menunjukkan bahwa ini adalah komponen client-side
 "use client";
 
+// Mengimpor komponen dan modul yang diperlukan dari berbagai pustaka dan direktori lokal
 import FieldInput from "@/components/organisms/FieldInputs";
 import {
   Form,
@@ -28,9 +30,12 @@ import React, { FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+// Mendefinisikan interface kosong untuk properti komponen PostJobPage
 interface PostJobPageProps {}
 
+// Mendefinisikan komponen fungsional PostJobPage
 const PostJobPage: FC<PostJobPageProps> = ({}) => {
+  // Menginisialisasi form menggunakan react-hook-form dan zod untuk validasi schema
   const form = useForm<z.infer<typeof jobFormSchema>>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
@@ -38,17 +43,20 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
     },
   });
 
+  // Fungsi untuk menangani submit form
   const onSubmit = (val: z.infer<typeof jobFormSchema>) => {
-    console.log(val);
+    console.log(val); // Output data form ke konsol
   };
 
   return (
     <div>
+      {/* Bagian untuk navigasi kembali ke halaman sebelumnya */}
       <div className="inline-flex items-center gap-2 cursor-pointer hover:text-primary">
         <ArrowLeftIcon className="w-7 h-7" />
         <span className="text-2xl font-semibold">Post a Job</span>
       </div>
 
+      {/* Bagian untuk menampilkan informasi dasar */}
       <div className="my-5">
         <div className="text-lg font-semibold">Basic Information</div>
         <div className="text-gray-400">
@@ -56,16 +64,19 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
         </div>
       </div>
 
+      {/* Garis pemisah antara bagian-bagian form */}
       <Separator />
 
+      {/* Form untuk posting pekerjaan */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="mt-5 space-y-6 pt-6"
         >
+          {/* Input untuk Job Title */}
           <FieldInput
             title="Job Title"
-            subtitle="Job titles must be describe one position"
+            subtitle="Job titles must describe one position"
           >
             <FormField
               control={form.control}
@@ -86,6 +97,7 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
             />
           </FieldInput>
 
+          {/* Input untuk Type of Employment */}
           <FieldInput
             title="Type of Employment"
             subtitle="You can select multiple type of employment"
@@ -120,6 +132,7 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
             />
           </FieldInput>
 
+          {/* Input untuk Salary */}
           <FieldInput
             title="Salary"
             subtitle="Please specify the estimated salary range for the role."
@@ -157,6 +170,7 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
             </div>
           </FieldInput>
 
+          {/* Input untuk Categories */}
           <FieldInput
             title="Categories"
             subtitle="You can select job categories"
@@ -197,4 +211,5 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
   );
 };
 
+// Mengekspor komponen PostJobPage sebagai ekspor default
 export default PostJobPage;
