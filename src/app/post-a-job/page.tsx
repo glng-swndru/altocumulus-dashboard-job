@@ -1,7 +1,5 @@
-// Menggunakan directive "use client" untuk menunjukkan bahwa ini adalah komponen client-side
 "use client";
 
-// Mengimpor komponen dan modul yang diperlukan dari berbagai pustaka dan direktori lokal
 import FieldInput from "@/components/organisms/FieldInputs";
 import {
   Form,
@@ -26,16 +24,19 @@ import { JOBTYPES } from "@/constants";
 import { jobFormSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeftIcon } from "lucide-react";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import InputSkills from "@/components/organisms/InputSkills";
+import CKEditor from "@/components/organisms/CKEditor";
+import InputBenefits from "@/components/organisms/InputBenefits";
+import { Button } from "@/components/ui/button";
 
-// Mendefinisikan interface kosong untuk properti komponen PostJobPage
 interface PostJobPageProps {}
 
-// Mendefinisikan komponen fungsional PostJobPage
 const PostJobPage: FC<PostJobPageProps> = ({}) => {
-  // Menginisialisasi form menggunakan react-hook-form dan zod untuk validasi schema
+  const [editorLoaded, setEditorLoaded] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof jobFormSchema>>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
@@ -43,20 +44,21 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
     },
   });
 
-  // Fungsi untuk menangani submit form
   const onSubmit = (val: z.infer<typeof jobFormSchema>) => {
-    console.log(val); // Output data form ke konsol
+    console.log(val);
   };
+
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
 
   return (
     <div>
-      {/* Bagian untuk navigasi kembali ke halaman sebelumnya */}
       <div className="inline-flex items-center gap-2 cursor-pointer hover:text-primary">
         <ArrowLeftIcon className="w-7 h-7" />
         <span className="text-2xl font-semibold">Post a Job</span>
       </div>
 
-      {/* Bagian untuk menampilkan informasi dasar */}
       <div className="my-5">
         <div className="text-lg font-semibold">Basic Information</div>
         <div className="text-gray-400">
@@ -64,19 +66,16 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
         </div>
       </div>
 
-      {/* Garis pemisah antara bagian-bagian form */}
       <Separator />
 
-      {/* Form untuk posting pekerjaan */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="mt-5 space-y-6 pt-6"
         >
-          {/* Input untuk Job Title */}
           <FieldInput
             title="Job Title"
-            subtitle="Job titles must describe one position"
+            subtitle="Job titles must be describe one position"
           >
             <FormField
               control={form.control}
@@ -97,7 +96,6 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
             />
           </FieldInput>
 
-          {/* Input untuk Type of Employment */}
           <FieldInput
             title="Type of Employment"
             subtitle="You can select multiple type of employment"
@@ -132,7 +130,6 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
             />
           </FieldInput>
 
-          {/* Input untuk Salary */}
           <FieldInput
             title="Salary"
             subtitle="Please specify the estimated salary range for the role."
@@ -170,7 +167,6 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
             </div>
           </FieldInput>
 
-          {/* Input untuk Categories */}
           <FieldInput
             title="Categories"
             subtitle="You can select job categories"
@@ -205,11 +201,72 @@ const PostJobPage: FC<PostJobPageProps> = ({}) => {
               )}
             />
           </FieldInput>
+
+          <FieldInput
+            title="Required Skills"
+            subtitle="Add required skills for the job"
+          >
+            <InputSkills form={form} />
+          </FieldInput>
+
+          <FieldInput
+            title="Job Descriptions"
+            subtitle="Job titles must be describe one position"
+          >
+            <CKEditor
+              form={form}
+              name="jobDescription"
+              editorLoaded={editorLoaded}
+            />
+          </FieldInput>
+
+          <FieldInput
+            title="Responsibilities"
+            subtitle="Outline the core responsibilities of the position"
+          >
+            <CKEditor
+              form={form}
+              name="responsibility"
+              editorLoaded={editorLoaded}
+            />
+          </FieldInput>
+
+          <FieldInput
+            title="Who You Are"
+            subtitle="Add your preffered candidates qualifications"
+          >
+            <CKEditor
+              form={form}
+              name="whoYouAre"
+              editorLoaded={editorLoaded}
+            />
+          </FieldInput>
+
+          <FieldInput
+            title="Nice-To-Haves"
+            subtitle="Add nice-to-have skills and qualifications for the role to encourage a more diverse set of candidates to apply"
+          >
+            <CKEditor
+              form={form}
+              name="niceToHave"
+              editorLoaded={editorLoaded}
+            />
+          </FieldInput>
+
+          <FieldInput
+            title="Perks and Benefits"
+            subtitle="Encourage more people to apply by sharing the attractive rewards and benefits you offer your employees"
+          >
+            <InputBenefits form={form} />
+          </FieldInput>
+
+          <div className="flex justify-end">
+            <Button size="lg">Do a Review</Button>
+          </div>
         </form>
       </Form>
     </div>
   );
 };
 
-// Mengekspor komponen PostJobPage sebagai ekspor default
 export default PostJobPage;

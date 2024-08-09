@@ -15,12 +15,10 @@ import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
 interface InputSkillsProps {
-  form: any;
-  name: string;
-  label: string;
+  form: UseFormReturn<z.infer<typeof jobFormSchema>>;
 }
 
-const InputSkills: FC<InputSkillsProps> = ({ form, name, label }) => {
+const InputSkills: FC<InputSkillsProps> = ({ form }) => {
   const [isHide, setHide] = useState<boolean>(false);
   const [values, setValues] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,31 +34,23 @@ const InputSkills: FC<InputSkillsProps> = ({ form, name, label }) => {
 
     setValues(newValue);
 
-    form.setValue(name, newValue);
+    form.setValue("requiredSkills", newValue);
   };
 
   const handleDeleteValue = (item: string) => {
     const skills: any = values.filter((value: string) => item !== value);
 
     setValues(skills);
-    form.setValue(name, skills);
+    form.setValue("requiredSkills", skills);
   };
-
-  useEffect(() => {
-    const val = form.getValues(name);
-
-    if (val && val.length > 0) {
-      setValues(val);
-    }
-  }, [form, name]);
 
   return (
     <FormField
       control={form.control}
-      name={name}
+      name={"requiredSkills"}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="block">{label}</FormLabel>
+          <FormLabel className="block">Add Skills</FormLabel>
           <FormControl>
             <>
               <Button
@@ -70,7 +60,7 @@ const InputSkills: FC<InputSkillsProps> = ({ form, name, label }) => {
                 onClick={() => setHide(!isHide)}
               >
                 <PlusIcon className="w-4 h-4 mr-2" />
-                {label}
+                Add Skills
               </Button>
               {isHide && (
                 <div className="my-4 flex flex-row gap-4">
