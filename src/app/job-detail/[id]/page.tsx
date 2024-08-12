@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { FC } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Applicants from "@/components/organisms/Applicants";
 
 interface JobDetailPageProps {}
 
@@ -21,13 +22,13 @@ const JobDetailPage: FC<JobDetailPageProps> = ({}) => {
         </div>
       </div>
 
-      <Tabs defaultValue="applicants" className="w-[400px]">
+      <Tabs defaultValue="applicants">
         <TabsList className="mb-8">
           <TabsTrigger value="applicants">Applicants</TabsTrigger>
           <TabsTrigger value="jobDetails">JobDetails</TabsTrigger>
         </TabsList>
         <TabsContent value="applicants">
-          Make changes to your applicants here.
+          <Applicants />
         </TabsContent>
         <TabsContent value="jobDetails">
           Change your jobDetails here.
